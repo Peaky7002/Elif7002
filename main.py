@@ -4,8 +4,24 @@ from flask import Flask, request
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 API_TOKEN = os.environ.get("BOT_TOKEN")
-bot = telebot.TeleBot(API_TOKEN)
+bot = telebot.TeleBot(API_TOKEN, threaded=False)
 app = Flask(__name__)
+
+# Buton listeleri ve callback fonksiyonları burada olacak...
+# Telegram komutları ve cevaplar...
+
+@app.route(f"/{API_TOKEN}", methods=["POST"])
+def webhook():
+    if request.headers.get("content-type") == "application/json":
+        json_str = request.get_data().decode("utf-8")
+        update = telebot.types.Update.de_json(json_str)
+        bot.process_new_updates([update])
+        return "", 200
+    return "OK", 200
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 # Yardım başlıkları (25’ten fazla ise gruplanacak)
 yardim_butonlari = [
