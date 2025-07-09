@@ -113,6 +113,11 @@ def home():
     bot.remove_webhook()
     bot.set_webhook(url=f"https://elif7002.onrender.com/{API_TOKEN}")
     return "Webhook set successfully"
+@app.route("/setwebhook", methods=["GET"])
+def set_webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url=f"https://elif7002.onrender.com/{API_TOKEN}")
+    return "Webhook set successfully", 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
